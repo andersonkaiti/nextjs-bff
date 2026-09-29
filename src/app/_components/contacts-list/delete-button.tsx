@@ -8,9 +8,15 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@components/ui/dialog'
+import { db } from '@lib/db'
 import { TrashIcon } from 'lucide-react'
+import { revalidatePath } from 'next/cache'
 
-export function DeleteButton() {
+interface IDeleteButtonProps {
+  contactId: string
+}
+
+export function DeleteButton({ contactId }: IDeleteButtonProps) {
   return (
     <Dialog>
       <DialogTrigger
@@ -29,7 +35,22 @@ export function DeleteButton() {
 
         <DialogFooter>
           <DialogClose render={<Button variant="outline">Cancelar</Button>} />
-          <Button variant="destructive">Deletar</Button>
+          <Button
+            variant="destructive"
+            onClick={async () => {
+              'use server'
+
+              await db.contact.delete({
+                where: {
+                  id: contactId,
+                },
+              })
+
+              revalidatePath('/')
+            }}
+          >
+            Deletar
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

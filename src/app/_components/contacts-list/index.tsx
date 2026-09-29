@@ -1,28 +1,13 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@components/ui/avatar'
 import { Button } from '@components/ui/button'
+import { db } from '@lib/db'
 import { Pen } from 'lucide-react'
 import Link from 'next/link'
 import { DeleteButton } from './delete-button'
 
-const contacts = [
-  {
-    id: String(Math.random()),
-    name: 'Contact',
-    email: 'anderkaiti@gmail.com',
-  },
-  {
-    id: String(Math.random()),
-    name: 'Contact',
-    email: 'anderkaiti@gmail.com',
-  },
-  {
-    id: String(Math.random()),
-    name: 'Contact',
-    email: 'anderkaiti@gmail.com',
-  },
-]
+export async function ContactsList() {
+  const contacts = await db.contact.findMany()
 
-export function ContactsList() {
   return (
     <div className="w-full space-y-2">
       {contacts.map(({ id, name, email }) => (
@@ -32,7 +17,7 @@ export function ContactsList() {
         >
           <div className="flex items-center gap-2">
             <Avatar>
-              <AvatarImage />
+              <AvatarImage src={`http://github.com/${name}.png`} />
               <AvatarFallback />
             </Avatar>
 
@@ -53,7 +38,7 @@ export function ContactsList() {
               }
             />
 
-            <DeleteButton />
+            <DeleteButton contactId={id} />
           </div>
         </div>
       ))}
