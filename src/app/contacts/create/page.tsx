@@ -1,8 +1,6 @@
-import { Button } from '@components/ui/button'
-import { Field, FieldGroup, FieldLabel } from '@components/ui/field'
-import { Input } from '@components/ui/input'
 import { ChevronLeft } from 'lucide-react'
 import Link from 'next/link'
+import { CreateContactForm } from './_components/form'
 
 export default function CreateContact() {
   return (
@@ -18,21 +16,7 @@ export default function CreateContact() {
         <h1 className="font-bold text-3xl tracking-tighter">Criar contato</h1>
       </header>
 
-      <form>
-        <FieldGroup>
-          <Field>
-            <FieldLabel>Nome</FieldLabel>
-            <Input />
-          </Field>
-
-          <Field>
-            <FieldLabel>E-mail</FieldLabel>
-            <Input />
-          </Field>
-        </FieldGroup>
-      </form>
-
-      <Button className="w-full">Criar</Button>
+      <CreateContactForm />
     </div>
   )
 }
