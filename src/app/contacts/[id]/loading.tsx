@@ -1,26 +1,8 @@
-import { db } from '@lib/db'
 import { ChevronLeft } from 'lucide-react'
 import Link from 'next/link'
-import { notFound } from 'next/navigation'
-import { UpdateContactForm } from './_components/form'
+import { UpdateContactFormLoadingSkeleton } from './_components/loading-skeleton'
 
-interface IUpdateContactProps {
-  params: Promise<{ id: string }>
-}
-
-export default async function UpdateContact({ params }: IUpdateContactProps) {
-  const { id } = await params
-
-  const contact = await db.contact.findFirst({
-    where: {
-      id,
-    },
-  })
-
-  if (!contact) {
-    notFound()
-  }
-
+export default function Loading() {
   return (
     <div className="mx-auto flex min-h-screen w-full max-w-2xl flex-col justify-center gap-8 p-5">
       <header className="space-y-2">
@@ -34,7 +16,7 @@ export default async function UpdateContact({ params }: IUpdateContactProps) {
         <h1 className="font-bold text-3xl tracking-tighter">Editar contato</h1>
       </header>
 
-      <UpdateContactForm contact={contact} />
+      <UpdateContactFormLoadingSkeleton />
     </div>
   )
 }
