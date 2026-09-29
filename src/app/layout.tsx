@@ -1,3 +1,4 @@
+import { Toaster } from '@components/ui/toast'
 import { Providers } from '@contexts/index'
 import { cn } from 'cn'
 import type { Metadata } from 'next'
@@ -35,7 +36,11 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
       suppressHydrationWarning
     >
       <body className="flex min-h-full flex-col">
-        <Providers>{children}</Providers>
+        <Providers>
+          {children}
+
+          <Toaster />
+        </Providers>
       </body>
     </html>
   )

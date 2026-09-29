@@ -3,23 +3,12 @@
 import { Button } from '@components/ui/button'
 import { Field, FieldGroup, FieldLabel } from '@components/ui/field'
 import { Input } from '@components/ui/input'
-import { useActionState } from 'react'
+import { Loader2 } from 'lucide-react'
+import { motion } from 'motion/react'
+import { useCreateContact } from '../_hooks/use-create-contact'
 
 export function CreateContactForm() {
-  const [_, formAction, isLoading] = useActionState(
-    async (_: unknown, formData: FormData) => {
-      const data = Object.fromEntries(formData)
-
-      await fetch('/api/contacts', {
-        method: 'POST',
-        body: JSON.stringify(data),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-    },
-    null,
-  )
+  const { formAction, isLoading } = useCreateContact()
 
   return (
     <form action={formAction}>
@@ -34,8 +23,38 @@ export function CreateContactForm() {
           <Input name="email" id="email" />
         </Field>
 
-        <Button type="submit" className="w-full" disabled={isLoading}>
-          Criar
+        <Button
+          type="submit"
+          className="relative w-full overflow-hidden"
+          disabled={isLoading}
+        >
+          <motion.span
+            animate={{
+              y: isLoading ? -8 : 0,
+              opacity: isLoading ? 0 : 1,
+            }}
+            transition={{
+              duration: 0.18,
+              ease: [0.22, 1, 0.36, 1],
+            }}
+            className="inline-flex items-center justify-center gap-[inherit]"
+          >
+            Criar
+          </motion.span>
+
+          <motion.div
+            animate={{
+              y: isLoading ? 0 : 8,
+              opacity: isLoading ? 1 : 0,
+            }}
+            transition={{
+              duration: 0.18,
+              ease: [0.22, 1, 0.36, 1],
+            }}
+            className="pointer-events-none absolute inset-0 flex items-center justify-center"
+          >
+            <Loader2 className="size-4 animate-spin" />
+          </motion.div>
         </Button>
       </FieldGroup>
     </form>
