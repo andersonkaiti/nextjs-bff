@@ -1,7 +1,7 @@
 import { toast } from '@components/ui/toast'
 import { useRouter } from 'next/navigation'
 import { useActionState } from 'react'
-import { createContactAction } from '../../actions/create-contact'
+import { createContactAction } from '../../_actions/create-contact'
 
 export function useCreateContact() {
   const router = useRouter()
@@ -13,7 +13,7 @@ export function useCreateContact() {
 
         if (status === 'error') {
           toast.add({
-            title: String(body.message),
+            title: String(body?.message),
             type: 'error',
           })
 
@@ -21,7 +21,7 @@ export function useCreateContact() {
         }
 
         toast.add({
-          title: String(body.message),
+          title: String(body?.message),
           type: 'success',
         })
 
