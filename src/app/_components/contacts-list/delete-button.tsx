@@ -1,3 +1,5 @@
+'use client'
+
 import { Button } from '@components/ui/button'
 import {
   Dialog,
@@ -8,21 +10,28 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@components/ui/dialog'
-import { db } from '@lib/db'
-import { TrashIcon } from 'lucide-react'
-import { revalidatePath } from 'next/cache'
+import { toast } from '@components/ui/toast'
+import { Loader2, TrashIcon } from 'lucide-react'
+import { useTransition } from 'react'
+import { deleteContactAction } from '../../contacts/_actions/delete-contact'
 
 interface IDeleteButtonProps {
   contactId: string
 }
 
 export function DeleteButton({ contactId }: IDeleteButtonProps) {
+  const [isLoading, startTransition] = useTransition()
+
   return (
     <Dialog>
       <DialogTrigger
         render={
           <Button variant="destructive">
-            <TrashIcon />
+            {isLoading ? (
+              <Loader2 className="size-4 animate-spin" />
+            ) : (
+              <TrashIcon />
+            )}
           </Button>
         }
       />
@@ -37,16 +46,22 @@ export function DeleteButton({ contactId }: IDeleteButtonProps) {
           <DialogClose render={<Button variant="outline">Cancelar</Button>} />
           <Button
             variant="destructive"
-            onClick={async () => {
-              'use server'
+            onClick={() => {
+              startTransition(async () => {
+                const { status } = await deleteContactAction(contactId)
 
-              await db.contact.delete({
-                where: {
-                  id: contactId,
-                },
+                if (status === 'success') {
+                  toast.add({
+                    title: 'Contato deletado com sucesso!',
+                  })
+                }
+
+                if (status === 'error') {
+                  toast.add({
+                    title: 'Contato deletado com sucesso!',
+                  })
+                }
               })
-
-              revalidatePath('/')
             }}
           >
             Deletar
